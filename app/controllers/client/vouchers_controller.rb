@@ -2,7 +2,7 @@ class Client::VouchersController < ApplicationController
     before_action :ensure_record_exists, only: [:show, :update]
 
     def index
-        vouchers = Voucher.all 
+        vouchers = Voucher.all
         render json: VoucherSerializer.new(vouchers).serializable_hash.to_json
     end
 
@@ -10,15 +10,15 @@ class Client::VouchersController < ApplicationController
         voucher = Voucher.find(params[:id])
         render json: VoucherSerializer.new(voucher).serializable_hash.to_json
     end
-    
+
     def update
         @record.update voucher_params
         render json: VoucherSerializer.new(@record).serializable_hash.to_json
     end
 
-     def create 
+     def create
         credit = Voucher.new voucher_params
-        if credit.save     
+        if credit.save
             render json: VoucherSerializer.new(credit).serializable_hash.to_json
         else
             render json: { error: voucher.errors.full_messages.first }, status: 400
@@ -28,7 +28,10 @@ class Client::VouchersController < ApplicationController
 
     def voucher_params
         params.permit(
-            :amount_use
+            :amount_use,
+            :name,
+            :description,
+            :amount
 
         )
     end
