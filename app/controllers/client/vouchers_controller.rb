@@ -21,10 +21,11 @@ class Client::VouchersController < ApplicationController
         if credit.save
             render json: VoucherSerializer.new(credit).serializable_hash.to_json
         else
-            render json: { error: voucher.errors.full_messages.first }, status: 400
+            render json: { error: voucher.errors.full_messages }, status: 400
         end
+    end
 
-     private
+    private
 
     def voucher_params
         params.permit(
@@ -32,9 +33,9 @@ class Client::VouchersController < ApplicationController
             :name,
             :description,
             :amount
-
         )
     end
+
     def ensure_record_exists
         @record = Voucher.find_by(id: params[:id])
         render json: { error: "Record not found" }, status: 404 unless @record
